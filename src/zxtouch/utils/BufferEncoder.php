@@ -60,6 +60,7 @@ class BufferEncoder{
      */
     public function encode() : void{
         $this->buffer = $this->taskId . implode(';;', $this->parameters) . "\r\n";
+        $this->encoded = true;
     }
 
 }
