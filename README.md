@@ -25,7 +25,7 @@ $zxtouch = new \zxtouch\ZXTouch("127.0.0.1"); //Connect to the device that is ru
 //Touch a screen
 $zxtouch->touch(new \zxtouch\element\touch\TouchDown(1, 500, 750));
 usleep(800000); //Wait for 0.8 seconds
-$zxtouch->touch(new \zxtouch\element\touch\TouchDUp(1, 500, 750));
+$zxtouch->touch(new \zxtouch\element\touch\TouchUp(1, 500, 750));
 $zxtouch->disconnect(); //Disconnect from the device
 ```
 
