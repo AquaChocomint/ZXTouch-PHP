@@ -201,12 +201,21 @@ class ZXTouch{
         $characters = mb_str_split($text->getText());
         $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
 
-        foreach($characters as $character){
+        for($i = 0, $character = current($characters); $i < count($characters); ++$i){
             $encoder->deleteParameters();
 
-            if($character === Text::BACKSPACE_CHARACTER){
-                $encoder->addParameter(KeyboardIds::DELETE_CHARACTERS);
-                $encoder->addParameter('1');
+            if($i > 0){
+                $character = next($characters);
+            }
+
+            if($character === '\\'){
+                $next = next($characters);
+                if($next === 'b'){
+                    $encoder->addParameter(KeyboardIds::DELETE_CHARACTERS);
+                    $encoder->addParameter('1');
+                }else{
+                    prev($characters);
+                }
             }else{
                 $encoder->addParameter(KeyboardIds::INSERT_TEXT);
                 $encoder->addParameter($character);
