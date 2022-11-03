@@ -1,0 +1,28 @@
+{
+  "name": "aquachocomint/zxtouch-php",
+  "description": "A library to communicate with ZXTouch written in PHP",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "zxtouch",
+    "autotouch"
+  ],
+  "authors": [
+    {
+      "name": "AquaChocomint"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": "^8.0",
+    "ext-sockets": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "zxtouch\\": "src/zxtouch/"
+    }
+  }
+}
