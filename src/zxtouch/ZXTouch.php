@@ -71,7 +71,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -87,7 +87,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -101,7 +101,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getBatteryInfoResult();
+        return $this->read(1024)->getBatteryInfoResult();
     }
 
     /**
@@ -115,7 +115,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDeviceInfoResult();
+        return $this->read(1024)->getDeviceInfoResult();
     }
 
     /**
@@ -129,7 +129,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getIntegerResult();
+        return $this->read(1024)->getIntegerResult();
     }
 
     /**
@@ -143,7 +143,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getIntegerResult();
+        return $this->read(1024)->getIntegerResult();
     }
 
     /**
@@ -157,7 +157,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getScreenSizeResult();
+        return $this->read(1024)->getScreenSizeResult();
     }
 
     /**
@@ -174,7 +174,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getOCRSupportedLanguagesResult();
+        return $this->read(1024)->getOCRSupportedLanguagesResult();
     }
 
     /**
@@ -189,7 +189,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -248,7 +248,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(2048)))->getOCRResult();
+        return $this->read(2048)->getOCRResult();
     }
 
     /**
@@ -267,7 +267,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getMatchingImageResult();
+        return $this->read(1024)->getMatchingImageResult();
     }
 
     /**
@@ -284,7 +284,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -301,7 +301,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getPickedColorResult();
+        return $this->read(1024)->getPickedColorResult();
     }
 
     /**
@@ -317,7 +317,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -346,7 +346,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getSearchedColorResult();
+        return $this->read(1024)->getSearchedColorResult();
     }
 
     /**
@@ -364,7 +364,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -384,7 +384,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -399,7 +399,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -410,7 +410,7 @@ class ZXTouch{
     public function startTouchRecording() : DefaultResult{
         $this->send(new BufferEncoder(TaskIds::TOUCH_RECORDING_START));
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -421,7 +421,7 @@ class ZXTouch{
     public function stopScriptPlaying() : DefaultResult{
         $this->send(new BufferEncoder(TaskIds::PLAY_SCRIPT_FORCE_STOP));
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -432,7 +432,7 @@ class ZXTouch{
     public function stopTouchRecording() : DefaultResult{
         $this->send(new BufferEncoder(TaskIds::TOUCH_RECORDING_STOP));
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -448,7 +448,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return (new BufferDecoder($this->read(1024)))->getDefaultResult();
+        return $this->read(1024)->getDefaultResult();
     }
 
     /**
@@ -496,10 +496,10 @@ class ZXTouch{
     /**
      * @internal
      */
-    private function read(int $length) : string{
+    private function read(int $length) : BufferDecoder{
         socket_recv($this->socket, $buffer, $length, MSG_PEEK);
 
-        return $buffer;
+        return new BufferDecoder($buffer);
     }
 
 }
