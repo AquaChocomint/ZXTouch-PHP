@@ -18,5 +18,8 @@ interface KeyboardIds{
     public const VIRTUAL_KEYBOARD = 2;
     public const MOVE_CURSOR = 3;
     public const DELETE_CHARACTERS = 4;
+    public const PASTE_CLIPBOARD = 5;
+    public const GET_CLIPBOARD = 6;
+    public const SET_CLIPBOARD = 7;
 
 }

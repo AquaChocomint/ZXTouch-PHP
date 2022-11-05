@@ -14,7 +14,7 @@ namespace zxtouch\element;
 
 class Text{
 
-    public const BACKSPACE_CHARACTER = "\b";
+    public const BACKSPACE_CHARACTER = "\b"; //For ZXTouch::insertText() only
 
     public function __construct(
         private string $text

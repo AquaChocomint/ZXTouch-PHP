@@ -22,6 +22,7 @@ use zxtouch\result\DefaultResult;
 use zxtouch\result\MatchingImageResult;
 use zxtouch\result\ScreenSizeResult;
 use zxtouch\result\SearchedColorResult;
+use zxtouch\result\TextResult;
 
 
 class BufferDecoder{
@@ -75,6 +76,10 @@ class BufferDecoder{
 
     public function getSearchedColorResult() : SearchedColorResult{
         return new SearchedColorResult($this->result, $this->error, (int) array_shift($this->details), (int) array_shift($this->details), (int) array_shift($this->details), (int) array_shift($this->details), (int) array_shift($this->details));
+    }
+
+    public function getTextResult() : TextResult{
+        return new TextResult($this->result, $this->error, (string) array_shift($this->details));
     }
 
     /**

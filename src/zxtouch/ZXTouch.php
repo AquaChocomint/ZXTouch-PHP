@@ -38,6 +38,7 @@ use zxtouch\result\ocr\OCRSupportedLanguagesResult;
 use zxtouch\result\PickedColorResult;
 use zxtouch\result\ScreenSizeResult;
 use zxtouch\result\SearchedColorResult;
+use zxtouch\result\TextResult;
 use zxtouch\utils\BufferDecoder;
 use zxtouch\utils\BufferEncoder;
 use zxtouch\utils\ColorSearchIds;
@@ -102,6 +103,20 @@ class ZXTouch{
         $this->send($encoder);
 
         return $this->read(1024)->getBatteryInfoResult();
+    }
+
+    /**
+     * Get text from clip board
+     *
+     * @return TextResult
+     */
+    public function getClipboard() : TextResult{
+        $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
+        $encoder->addParameter(KeyboardIds::GET_CLIPBOARD);
+
+        $this->send($encoder);
+
+        return $this->read(1024)->getTextResult();
     }
 
     /**
@@ -288,6 +303,20 @@ class ZXTouch{
     }
 
     /**
+     * Paste text from clip board
+     *
+     * @return DefaultResult
+     */
+    public function pasteClipboard() : DefaultResult{
+        $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
+        $encoder->addParameter(KeyboardIds::PASTE_CLIPBOARD);
+
+        $this->send($encoder);
+
+        return $this->read(1024)->getDefaultResult();
+    }
+
+    /**
      * Get the rgb value from the screen
      *
      * @param Coordinates $coordinates
@@ -381,6 +410,23 @@ class ZXTouch{
         $encoder->addParameter($toast->getDuration());
         $encoder->addParameter($toast->getPosition());
         $encoder->addParameter($toast->getFontSize());
+
+        $this->send($encoder);
+
+        return $this->read(1024)->getDefaultResult();
+    }
+
+    /**
+     * Set clipboard text
+     *
+     * @param Text $text
+     *
+     * @return DefaultResult
+     */
+    public function setClipboard(Text $text) : DefaultResult{
+        $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
+        $encoder->addParameter(KeyboardIds::SET_CLIPBOARD);
+        $encoder->addParameter($text->getText());
 
         $this->send($encoder);
 
