@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace zxtouch\element\touch;
 
 
@@ -54,7 +56,7 @@ abstract class Touch{
      * @return string
      */
     final public function getBuffer() : string{
-        return $this->getType() . str_pad($this->getFingerIndex(), 2, '0', STR_PAD_LEFT) . str_pad((string) ($this->getX() * 10), 5, '0', STR_PAD_LEFT) . str_pad((string) ($this->getY() * 10), 5, '0', STR_PAD_LEFT);
+        return $this->getType() . str_pad((string) $this->getFingerIndex(), 2, '0', STR_PAD_LEFT) . str_pad((string) ($this->getX() * 10), 5, '0', STR_PAD_LEFT) . str_pad((string) ($this->getY() * 10), 5, '0', STR_PAD_LEFT);
     }
 
 }

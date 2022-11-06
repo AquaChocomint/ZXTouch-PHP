@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace zxtouch\utils;
 
 
@@ -21,5 +23,8 @@ interface KeyboardIds{
     public const PASTE_CLIPBOARD = 5;
     public const GET_CLIPBOARD = 6;
     public const SET_CLIPBOARD = 7;
+
+    public const HIDE_KEYBOARD = 1;
+    public const SHOW_KEYBOARD = 2;
 
 }

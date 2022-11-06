@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace zxtouch;
 
 
@@ -44,6 +46,7 @@ use zxtouch\utils\BufferEncoder;
 use zxtouch\utils\ColorSearchIds;
 use zxtouch\utils\DeviceInfoIds;
 use zxtouch\utils\KeyboardIds;
+use zxtouch\utils\OCRIds;
 use zxtouch\utils\TaskIds;
 
 
@@ -68,7 +71,7 @@ class ZXTouch{
      */
     public function accurateUsleep(Microsecond $microsecond) : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::USLEEP);
-        $encoder->addParameter($microsecond->getMicrosecond());
+        $encoder->addParameter((string) $microsecond->getMicrosecond());
 
         $this->send($encoder);
 
@@ -98,7 +101,7 @@ class ZXTouch{
      */
     public function getBatteryInfo() : BatteryInfoResult{
         $encoder = new BufferEncoder(TaskIds::GET_DEVICE_INFO);
-        $encoder->addParameter(DeviceInfoIds::BATTERY_INFO);
+        $encoder->addParameter((string) DeviceInfoIds::BATTERY_INFO);
 
         $this->send($encoder);
 
@@ -112,7 +115,7 @@ class ZXTouch{
      */
     public function getClipboard() : TextResult{
         $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
-        $encoder->addParameter(KeyboardIds::GET_CLIPBOARD);
+        $encoder->addParameter((string) KeyboardIds::GET_CLIPBOARD);
 
         $this->send($encoder);
 
@@ -126,7 +129,7 @@ class ZXTouch{
      */
     public function getDeviceInfo() : DeviceInfoResult{
         $encoder = new BufferEncoder(TaskIds::GET_DEVICE_INFO);
-        $encoder->addParameter(DeviceInfoIds::DEVICE_INFO);
+        $encoder->addParameter((string) DeviceInfoIds::DEVICE_INFO);
 
         $this->send($encoder);
 
@@ -140,7 +143,7 @@ class ZXTouch{
      */
     public function getScreenOrientation() : IntegerResult{
         $encoder = new BufferEncoder(TaskIds::GET_DEVICE_INFO);
-        $encoder->addParameter(DeviceInfoIds::SCREEN_ORIENTATION);
+        $encoder->addParameter((string) DeviceInfoIds::SCREEN_ORIENTATION);
 
         $this->send($encoder);
 
@@ -154,7 +157,7 @@ class ZXTouch{
      */
     public function getScreenScale() : IntegerResult{
         $encoder = new BufferEncoder(TaskIds::GET_DEVICE_INFO);
-        $encoder->addParameter(DeviceInfoIds::SCREEN_SCALE);
+        $encoder->addParameter((string) DeviceInfoIds::SCREEN_SCALE);
 
         $this->send($encoder);
 
@@ -168,7 +171,7 @@ class ZXTouch{
      */
     public function getScreenSize() : ScreenSizeResult{
         $encoder = new BufferEncoder(TaskIds::GET_DEVICE_INFO);
-        $encoder->addParameter(DeviceInfoIds::SCREEN_SIZE);
+        $encoder->addParameter((string) DeviceInfoIds::SCREEN_SIZE);
 
         $this->send($encoder);
 
@@ -182,10 +185,10 @@ class ZXTouch{
      *
      * @return OCRSupportedLanguagesResult
      */
-    public function getSupoortedOCRLanguages(TextRecognitionLevel $recognitionLevel) : OCRSupportedLanguagesResult{
+    public function getSupportedOCRLanguages(TextRecognitionLevel $recognitionLevel) : OCRSupportedLanguagesResult{
         $encoder = new BufferEncoder(TaskIds::TEXT_RECOGNIZER);
-        $encoder->addParameter('2');
-        $encoder->addParameter($recognitionLevel->getRecognitionLevel());
+        $encoder->addParameter((string) OCRIds::GET_SUPPORTED_LANGUAGES);
+        $encoder->addParameter((string) $recognitionLevel->getRecognitionLevel());
 
         $this->send($encoder);
 
@@ -199,8 +202,8 @@ class ZXTouch{
      */
     public function hideKeyboard() : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
-        $encoder->addParameter(KeyboardIds::VIRTUAL_KEYBOARD);
-        $encoder->addParameter(1);
+        $encoder->addParameter((string) KeyboardIds::VIRTUAL_KEYBOARD);
+        $encoder->addParameter((string) KeyboardIds::SHOW_KEYBOARD);
 
         $this->send($encoder);
 
@@ -226,13 +229,13 @@ class ZXTouch{
             if($character === '\\'){
                 $next = next($characters);
                 if($next === 'b'){
-                    $encoder->addParameter(KeyboardIds::DELETE_CHARACTERS);
+                    $encoder->addParameter((string) KeyboardIds::DELETE_CHARACTERS);
                     $encoder->addParameter('1');
                 }else{
                     prev($characters);
                 }
             }else{
-                $encoder->addParameter(KeyboardIds::INSERT_TEXT);
+                $encoder->addParameter((string) KeyboardIds::INSERT_TEXT);
                 $encoder->addParameter($character);
             }
 
@@ -252,13 +255,13 @@ class ZXTouch{
      */
     public function ocr(Region $region, OCR $ocr, TextRecognitionLevel $recognitionLevel) : OCRResult{
         $encoder = new BufferEncoder(TaskIds::TEXT_RECOGNIZER);
-        $encoder->addParameter('1');
+        $encoder->addParameter((string) OCRIds::GET_SUPPORTED_LANGUAGES);
         $encoder->addParameter($region->toOCR());
         $encoder->addParameter($ocr->getConvertedWords());
-        $encoder->addParameter($ocr->getMinimumHeight());
-        $encoder->addParameter($recognitionLevel->getRecognitionLevel());
+        $encoder->addParameter((string) $ocr->getMinimumHeight());
+        $encoder->addParameter((string) $recognitionLevel->getRecognitionLevel());
         $encoder->addParameter($ocr->getConvertedLanguages());
-        $encoder->addParameter($ocr->getAutoCorrect());
+        $encoder->addParameter((string) $ocr->getAutoCorrect());
         $encoder->addParameter($ocr->getDebugImagePath());
 
         $this->send($encoder);
@@ -276,9 +279,9 @@ class ZXTouch{
     public function matchImage(ComparisonImage $image) : MatchingImageResult{
         $encoder = new BufferEncoder(TaskIds::TEMPLATE_MATCH);
         $encoder->addParameter($image->getPath());
-        $encoder->addParameter($image->getMaxTryTimes());
-        $encoder->addParameter($image->getAcceptableValue());
-        $encoder->addParameter($image->getScaleRation());
+        $encoder->addParameter((string) $image->getMaxTryTimes());
+        $encoder->addParameter((string) $image->getAcceptableValue());
+        $encoder->addParameter((string) $image->getScaleRation());
 
         $this->send($encoder);
 
@@ -294,8 +297,8 @@ class ZXTouch{
      */
     public function moveCursor(Offset $offset) : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
-        $encoder->addParameter(KeyboardIds::MOVE_CURSOR);
-        $encoder->addParameter($offset->getOffset());
+        $encoder->addParameter((string) KeyboardIds::MOVE_CURSOR);
+        $encoder->addParameter((string) $offset->getOffset());
 
         $this->send($encoder);
 
@@ -309,7 +312,7 @@ class ZXTouch{
      */
     public function pasteClipboard() : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
-        $encoder->addParameter(KeyboardIds::PASTE_CLIPBOARD);
+        $encoder->addParameter((string) KeyboardIds::PASTE_CLIPBOARD);
 
         $this->send($encoder);
 
@@ -325,8 +328,8 @@ class ZXTouch{
      */
     public function pickColor(Coordinates $coordinates) : PickedColorResult{
         $encoder = new BufferEncoder(TaskIds::COLOR_PICKER);
-        $encoder->addParameter($coordinates->getX());
-        $encoder->addParameter($coordinates->getY());
+        $encoder->addParameter((string) $coordinates->getX());
+        $encoder->addParameter((string) $coordinates->getY());
 
         $this->send($encoder);
 
@@ -360,18 +363,18 @@ class ZXTouch{
      */
     public function searchColor(Region $region, ColorRange $red, ColorRange $green, ColorRange $blue, int $pixelToSkip = 0) : SearchedColorResult{
         $encoder = new BufferEncoder(TaskIds::COLOR_SEARCHER);
-        $encoder->addParameter(ColorSearchIds::RGB_SINGLE_POINT);
-        $encoder->addParameter($region->getX());
-        $encoder->addParameter($region->getY());
-        $encoder->addParameter($region->getWidth());
-        $encoder->addParameter($region->getHeight());
-        $encoder->addParameter($red->getColorMin());
-        $encoder->addParameter($red->getColorMax());
-        $encoder->addParameter($green->getColorMin());
-        $encoder->addParameter($green->getColorMax());
-        $encoder->addParameter($blue->getColorMin());
-        $encoder->addParameter($blue->getColorMax());
-        $encoder->addParameter($pixelToSkip);
+        $encoder->addParameter((string) ColorSearchIds::RGB_SINGLE_POINT);
+        $encoder->addParameter((string) $region->getX());
+        $encoder->addParameter((string) $region->getY());
+        $encoder->addParameter((string) $region->getWidth());
+        $encoder->addParameter((string) $region->getHeight());
+        $encoder->addParameter((string) $red->getColorMin());
+        $encoder->addParameter((string) $red->getColorMax());
+        $encoder->addParameter((string) $green->getColorMin());
+        $encoder->addParameter((string) $green->getColorMax());
+        $encoder->addParameter((string) $blue->getColorMin());
+        $encoder->addParameter((string) $blue->getColorMax());
+        $encoder->addParameter((string) $pixelToSkip);
 
         $this->send($encoder);
 
@@ -389,7 +392,7 @@ class ZXTouch{
         $encoder = new BufferEncoder(TaskIds::SHOW_ALERT_BOX);
         $encoder->addParameter($alertInfo->getTitle());
         $encoder->addParameter($alertInfo->getContent());
-        $encoder->addParameter($alertInfo->getDuration());
+        $encoder->addParameter((string) $alertInfo->getDuration());
 
         $this->send($encoder);
 
@@ -405,11 +408,11 @@ class ZXTouch{
      */
     public function sendToast(Toast $toast) : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::SHOW_TOAST);
-        $encoder->addParameter($toast->getType());
+        $encoder->addParameter((string) $toast->getType());
         $encoder->addParameter($toast->getContent());
-        $encoder->addParameter($toast->getDuration());
-        $encoder->addParameter($toast->getPosition());
-        $encoder->addParameter($toast->getFontSize());
+        $encoder->addParameter((string) $toast->getDuration());
+        $encoder->addParameter((string) $toast->getPosition());
+        $encoder->addParameter((string) $toast->getFontSize());
 
         $this->send($encoder);
 
@@ -425,7 +428,7 @@ class ZXTouch{
      */
     public function setClipboard(Text $text) : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
-        $encoder->addParameter(KeyboardIds::SET_CLIPBOARD);
+        $encoder->addParameter((string) KeyboardIds::SET_CLIPBOARD);
         $encoder->addParameter($text->getText());
 
         $this->send($encoder);
@@ -440,8 +443,8 @@ class ZXTouch{
      */
     public function showKeyboard() : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
-        $encoder->addParameter(KeyboardIds::VIRTUAL_KEYBOARD);
-        $encoder->addParameter(2);
+        $encoder->addParameter((string) KeyboardIds::VIRTUAL_KEYBOARD);
+        $encoder->addParameter((string) KeyboardIds::SHOW_KEYBOARD);
 
         $this->send($encoder);
 

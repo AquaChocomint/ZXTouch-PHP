@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace zxtouch\result\ocr;
 
 
@@ -38,10 +40,10 @@ class OCRResult extends Result{
             $split = explode(',,', $detail);
             $this->texts[] = new OCRText(
                 array_shift($split),
-                array_shift($split),
-                array_shift($split),
-                array_shift($split),
-                array_shift($split)
+                (int) array_shift($split) ?? 0,
+                (int) array_shift($split) ?? 0,
+                (int) array_shift($split) ?? 0,
+                (int) array_shift($split) ?? 0
             );
         }
     }

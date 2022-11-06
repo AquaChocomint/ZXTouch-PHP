@@ -9,15 +9,13 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
 
-namespace zxtouch\element\toast;
+namespace zxtouch\utils;
 
 
-class ToastHide extends Toast{
+interface OCRIds{
 
-    public function getType() : int{
-        return 0;
-    }
+    public const RECOGNIZE_TEXT = 1;
+    public const GET_SUPPORTED_LANGUAGES = 2;
 
 }
