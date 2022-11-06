@@ -203,7 +203,7 @@ class ZXTouch{
     public function hideKeyboard() : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
         $encoder->addParameter((string) KeyboardIds::VIRTUAL_KEYBOARD);
-        $encoder->addParameter((string) KeyboardIds::SHOW_KEYBOARD);
+        $encoder->addParameter((string) KeyboardIds::HIDE_KEYBOARD);
 
         $this->send($encoder);
 
