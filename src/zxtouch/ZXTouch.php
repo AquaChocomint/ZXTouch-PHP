@@ -255,7 +255,7 @@ class ZXTouch{
      */
     public function ocr(Region $region, OCR $ocr, TextRecognitionLevel $recognitionLevel) : OCRResult{
         $encoder = new BufferEncoder(TaskIds::TEXT_RECOGNIZER);
-        $encoder->addParameter((string) OCRIds::GET_SUPPORTED_LANGUAGES);
+        $encoder->addParameter((string) OCRIds::RECOGNIZE_TEXT);
         $encoder->addParameter($region->toOCR());
         $encoder->addParameter($ocr->getConvertedWords());
         $encoder->addParameter((string) $ocr->getMinimumHeight());
