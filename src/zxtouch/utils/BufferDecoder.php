@@ -84,13 +84,6 @@ class BufferDecoder{
         return new TextResult($this->result, $this->error, (string) array_shift($this->details));
     }
 
-    /**
-     * @return string[]
-     */
-    public function getDetails() : array{
-        return $this->details;
-    }
-
     private function decode() : void{
         $response = explode(';;', str_replace("\r\n", "", $this->buffer));
         $this->result = array_shift($response) === '0';
