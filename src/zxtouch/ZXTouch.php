@@ -507,13 +507,13 @@ class ZXTouch{
      *
      * @param Coordinates $coordinates
      * @param int         $fingerIndex
+     *
+     * @throws ZXTouchException
      */
     public function tap(Coordinates $coordinates, int $fingerIndex = 1) : void{
-        try{
-            $this->touch(new TouchDown($fingerIndex, $coordinates));
-            usleep(80000);
-            $this->touch(new TouchUp($fingerIndex, $coordinates));
-        }catch(ZXTouchException){}
+        $this->touch(new TouchDown($fingerIndex, $coordinates));
+        usleep(80000);
+        $this->touch(new TouchUp($fingerIndex, $coordinates));
     }
 
     /**
