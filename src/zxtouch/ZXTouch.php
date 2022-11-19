@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace zxtouch;
 
 
-use Socket;
 use zxtouch\element\AlertInfo;
 use zxtouch\element\ColorRange;
 use zxtouch\element\ComparisonImage;
@@ -42,6 +41,7 @@ use zxtouch\result\TextResult;
 use zxtouch\utils\BufferDecoder;
 use zxtouch\utils\BufferEncoder;
 use zxtouch\utils\ColorSearchIds;
+use zxtouch\utils\Connection;
 use zxtouch\utils\DeviceInfoIds;
 use zxtouch\utils\KeyboardIds;
 use zxtouch\utils\OCRIds;
@@ -50,14 +50,19 @@ use zxtouch\utils\TaskIds;
 
 class ZXTouch{
 
-    private Socket $socket;
+    private Connection $connection;
 
-    public function __construct(
-        private string $ip,
-        private int $port = 6000
-    ){
-        $this->socket = socket_create(AF_INET, SOCK_STREAM, 0);
-        socket_connect($this->socket, $this->ip, $this->port);
+    public function __construct(string $ip, int $port = 6000){
+        $this->connection = new Connection($ip, $port);
+    }
+
+    /**
+     * Returns a Connection instance to get socket, ip, and port
+     *
+     * @return Connection
+     */
+    public function getConnection() : Connection{
+        return $this->connection;
     }
 
     /**
@@ -538,26 +543,19 @@ class ZXTouch{
     }
 
     /**
-     * Disconnect socket
-     */
-    public function disconnect() : void{
-        socket_close($this->socket);
-    }
-
-    /**
      * @internal
      */
     private function send(BufferEncoder $encoder) : void{
         $buffer = $encoder->getBuffer();
 
-        socket_send($this->socket, $buffer, strlen($buffer), MSG_DONTROUTE);
+        socket_send($this->connection->getSocket(), $buffer, strlen($buffer), MSG_DONTROUTE);
     }
 
     /**
      * @internal
      */
     private function read(int $length = 1024) : BufferDecoder{
-        socket_recv($this->socket, $buffer, $length, 0);
+        socket_recv($this->connection->getSocket(), $buffer, $length, 0);
 
         return new BufferDecoder($buffer);
     }

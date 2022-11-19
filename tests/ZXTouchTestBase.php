@@ -17,7 +17,7 @@ abstract class ZXTouchTestBase extends TestCase{
     }
 
     protected function tearDown() : void{
-        $this->zx->disconnect();
+        $this->zx->getConnection()->disconnect();
     }
 
 }

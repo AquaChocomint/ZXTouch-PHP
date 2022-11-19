@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace zxtouch\result;
 
 
+use zxtouch\element\value\IntegerValue;
+
+
 class IntegerResult extends Result{
 
     private int $value;
@@ -29,6 +32,13 @@ class IntegerResult extends Result{
      */
     public function getValue() : int{
         return $this->value;
+    }
+
+    /**
+     * @return IntegerValue
+     */
+    public function asIntegerValue() : IntegerValue{
+        return new IntegerValue($this->value);
     }
 
 }
