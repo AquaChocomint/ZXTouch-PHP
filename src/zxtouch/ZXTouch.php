@@ -15,21 +15,19 @@ namespace zxtouch;
 
 
 use Socket;
-use zxtouch\element\AbsolutePath;
 use zxtouch\element\AlertInfo;
-use zxtouch\element\AppIdentifier;
 use zxtouch\element\ColorRange;
 use zxtouch\element\ComparisonImage;
 use zxtouch\element\Coordinates;
-use zxtouch\element\Microsecond;
 use zxtouch\element\OCR;
-use zxtouch\element\Offset;
 use zxtouch\element\Region;
-use zxtouch\element\ShellCommand;
 use zxtouch\element\Text;
-use zxtouch\element\TextRecognitionLevel;
 use zxtouch\element\toast\Toast;
 use zxtouch\element\touch\Touch;
+use zxtouch\element\touch\TouchDown;
+use zxtouch\element\touch\TouchUp;
+use zxtouch\element\value\IntegerValue;
+use zxtouch\element\value\StringValue;
 use zxtouch\result\BatteryInfoResult;
 use zxtouch\result\DefaultResult;
 use zxtouch\result\DeviceInfoResult;
@@ -65,33 +63,33 @@ class ZXTouch{
     /**
      * I think this is useless for PHP...
      *
-     * @param Microsecond $microsecond
+     * @param IntegerValue $microsecond
      *
      * @return DefaultResult
      */
-    public function accurateUsleep(Microsecond $microsecond) : DefaultResult{
+    public function accurateUsleep(IntegerValue $microsecond) : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::USLEEP);
-        $encoder->addParameter((string) $microsecond->getMicrosecond());
+        $encoder->addParameter((string) $microsecond->getValue());
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
      * Run shell command on device as root
      *
-     * @param ShellCommand $command
+     * @param StringValue $command
      *
      * @return DefaultResult
      */
-    public function executeShell(ShellCommand $command) : DefaultResult{
+    public function executeShell(StringValue $command) : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::RUN_SHELL);
-        $encoder->addParameter($command->getCommand());
+        $encoder->addParameter($command->getValue());
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -105,7 +103,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getBatteryInfoResult();
+        return $this->read()->getBatteryInfoResult();
     }
 
     /**
@@ -119,7 +117,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getTextResult();
+        return $this->read()->getTextResult();
     }
 
     /**
@@ -133,7 +131,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDeviceInfoResult();
+        return $this->read()->getDeviceInfoResult();
     }
 
     /**
@@ -147,7 +145,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getIntegerResult();
+        return $this->read()->getIntegerResult();
     }
 
     /**
@@ -161,7 +159,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getIntegerResult();
+        return $this->read()->getIntegerResult();
     }
 
     /**
@@ -175,24 +173,24 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getScreenSizeResult();
+        return $this->read()->getScreenSizeResult();
     }
 
     /**
      * Get languages that can be recognized by OCR
      *
-     * @param TextRecognitionLevel $recognitionLevel
+     * @param IntegerValue $recognitionLevel A value that determines whether the request prioritizes accuracy or speed in text recognition. 0 means accurate. 1 means faster.
      *
      * @return OCRSupportedLanguagesResult
      */
-    public function getSupportedOCRLanguages(TextRecognitionLevel $recognitionLevel) : OCRSupportedLanguagesResult{
+    public function getSupportedOCRLanguages(IntegerValue $recognitionLevel) : OCRSupportedLanguagesResult{
         $encoder = new BufferEncoder(TaskIds::TEXT_RECOGNIZER);
         $encoder->addParameter((string) OCRIds::GET_SUPPORTED_LANGUAGES);
-        $encoder->addParameter((string) $recognitionLevel->getRecognitionLevel());
+        $encoder->addParameter((string) $recognitionLevel->getValue());
 
         $this->send($encoder);
 
-        return $this->read(1024)->getOCRSupportedLanguagesResult();
+        return $this->read()->getOCRSupportedLanguagesResult();
     }
 
     /**
@@ -207,7 +205,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -234,13 +232,13 @@ class ZXTouch{
                 }else{
                     prev($characters);
                 }
-            }else{
+            }elseif(is_string($character)){
                 $encoder->addParameter((string) KeyboardIds::INSERT_TEXT);
                 $encoder->addParameter($character);
             }
 
             $this->send($encoder);
-            $this->read(1024);
+            $this->read();
         }
     }
 
@@ -249,17 +247,16 @@ class ZXTouch{
      *
      * @param Region               $region
      * @param OCR                  $ocr
-     * @param TextRecognitionLevel $recognitionLevel
      *
      * @return OCRResult
      */
-    public function ocr(Region $region, OCR $ocr, TextRecognitionLevel $recognitionLevel) : OCRResult{
+    public function ocr(Region $region, OCR $ocr) : OCRResult{
         $encoder = new BufferEncoder(TaskIds::TEXT_RECOGNIZER);
         $encoder->addParameter((string) OCRIds::RECOGNIZE_TEXT);
         $encoder->addParameter($region->toOCR());
         $encoder->addParameter($ocr->getConvertedWords());
         $encoder->addParameter((string) $ocr->getMinimumHeight());
-        $encoder->addParameter((string) $recognitionLevel->getRecognitionLevel());
+        $encoder->addParameter((string) $ocr->getRecognitionLevel());
         $encoder->addParameter($ocr->getConvertedLanguages());
         $encoder->addParameter((string) $ocr->getAutoCorrect());
         $encoder->addParameter($ocr->getDebugImagePath());
@@ -285,24 +282,24 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getMatchingImageResult();
+        return $this->read()->getMatchingImageResult();
     }
 
     /**
      * Move the cursor on the text field
      *
-     * @param Offset $offset
+     * @param IntegerValue $offset
      *
      * @return DefaultResult
      */
-    public function moveCursor(Offset $offset) : DefaultResult{
+    public function moveCursor(IntegerValue $offset) : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::KEYBOARDIMPL);
         $encoder->addParameter((string) KeyboardIds::MOVE_CURSOR);
-        $encoder->addParameter((string) $offset->getOffset());
+        $encoder->addParameter((string) $offset->getValue());
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -316,7 +313,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -333,23 +330,23 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getPickedColorResult();
+        return $this->read()->getPickedColorResult();
     }
 
     /**
      * Play a script
      *
-     * @param AbsolutePath $path
+     * @param StringValue $path
      *
      * @return DefaultResult
      */
-    public function playScript(AbsolutePath $path) : DefaultResult{
+    public function playScript(StringValue $path) : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::PLAY_SCRIPT);
-        $encoder->addParameter($path->getPath());
+        $encoder->addParameter($path->getValue());
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -378,7 +375,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getSearchedColorResult();
+        return $this->read()->getSearchedColorResult();
     }
 
     /**
@@ -396,7 +393,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -416,7 +413,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -433,7 +430,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -448,7 +445,7 @@ class ZXTouch{
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -459,7 +456,7 @@ class ZXTouch{
     public function startTouchRecording() : DefaultResult{
         $this->send(new BufferEncoder(TaskIds::TOUCH_RECORDING_START));
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -470,7 +467,7 @@ class ZXTouch{
     public function stopScriptPlaying() : DefaultResult{
         $this->send(new BufferEncoder(TaskIds::PLAY_SCRIPT_FORCE_STOP));
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
@@ -481,23 +478,37 @@ class ZXTouch{
     public function stopTouchRecording() : DefaultResult{
         $this->send(new BufferEncoder(TaskIds::TOUCH_RECORDING_STOP));
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
     }
 
     /**
      * Bring an application to foreground
      *
-     * @param AppIdentifier $identifier
+     * @param StringValue $identifier This value must be an identifier of application
      *
      * @return DefaultResult
      */
-    public function switchApp(AppIdentifier $identifier) : DefaultResult{
+    public function switchApp(StringValue $identifier) : DefaultResult{
         $encoder = new BufferEncoder(TaskIds::PROCESS_BRING_FOREGROUND);
-        $encoder->addParameter($identifier->getIdentifier());
+        $encoder->addParameter($identifier->getValue());
 
         $this->send($encoder);
 
-        return $this->read(1024)->getDefaultResult();
+        return $this->read()->getDefaultResult();
+    }
+
+    /**
+     * Perform a single tap on screen
+     *
+     * @param Coordinates $coordinates
+     * @param int         $fingerIndex
+     */
+    public function tap(Coordinates $coordinates, int $fingerIndex = 1) : void{
+        try{
+            $this->touch(new TouchDown($fingerIndex, $coordinates));
+            usleep(80000);
+            $this->touch(new TouchUp($fingerIndex, $coordinates));
+        }catch(ZXTouchException){}
     }
 
     /**
@@ -539,14 +550,14 @@ class ZXTouch{
     private function send(BufferEncoder $encoder) : void{
         $buffer = $encoder->getBuffer();
 
-        socket_send($this->socket, $buffer, strlen($buffer), MSG_OOB);
+        socket_send($this->socket, $buffer, strlen($buffer), MSG_DONTROUTE);
     }
 
     /**
      * @internal
      */
-    private function read(int $length) : BufferDecoder{
-        socket_recv($this->socket, $buffer, $length, MSG_PEEK);
+    private function read(int $length = 1024) : BufferDecoder{
+        socket_recv($this->socket, $buffer, $length, 0);
 
         return new BufferDecoder($buffer);
     }

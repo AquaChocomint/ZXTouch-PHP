@@ -27,8 +27,7 @@ class ColorRange{
      * @param int $color2
      */
     public function __construct(int $color1, int $color2){
-        $this->colorMin = min($color1, $color2);
-        $this->colorMax = max($color1, $color2);
+        $this->setColorRange($color1, $color2);
     }
 
     /**
@@ -43,6 +42,19 @@ class ColorRange{
      */
     public function getColorMax() : int{
         return $this->colorMax;
+    }
+
+    /**
+     * @param int $color1
+     * @param int $color2
+     *
+     * @return ColorRange
+     */
+    public function setColorRange(int $color1, int $color2) : ColorRange{
+        $this->colorMin = min($color1, $color2);
+        $this->colorMax = max($color1, $color2);
+
+        return $this;
     }
 
 }

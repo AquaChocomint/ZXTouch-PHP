@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace zxtouch\result;
 
 
+use zxtouch\element\Region;
+
+
 class ScreenSizeResult extends Result{
 
     private int $width;
@@ -38,6 +41,15 @@ class ScreenSizeResult extends Result{
      */
     public function getHeight() : int{
         return $this->height;
+    }
+
+    /**
+     * Return a Region instance that selects all screen area
+     *
+     * @return Region
+     */
+    public function asFullRegion() : Region{
+        return new Region(0, 0, $this->width, $this->height);
     }
 
 }

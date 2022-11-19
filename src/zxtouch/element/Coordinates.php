@@ -36,4 +36,35 @@ class Coordinates{
         return $this->y;
     }
 
+    /**
+     * @param int $x
+     *
+     * @return Coordinates
+     */
+    public function setX(int $x) : Coordinates{
+        $this->x = $x;
+
+        return $this;
+    }
+
+    /**
+     * @param int $y
+     *
+     * @return Coordinates
+     */
+    public function setY(int $y) : Coordinates{
+        $this->y = $y;
+
+        return $this;
+    }
+
+    /**
+     * Clone this coordinates instance
+     *
+     * @return Coordinates
+     */
+    public function copy() : Coordinates{
+        return new Coordinates($this->x, $this->y);
+    }
+
 }

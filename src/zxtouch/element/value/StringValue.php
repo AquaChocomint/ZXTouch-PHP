@@ -11,32 +11,33 @@
 
 declare(strict_types=1);
 
-namespace zxtouch\element;
+namespace zxtouch\element\value;
 
 
-class Text{
+class StringValue{
 
-    public const BACKSPACE_CHARACTER = "\b"; //For ZXTouch::insertText() only
-
+    /**
+     * @param string $value
+     */
     public function __construct(
-        private string $text
+        private string $value
     ){
     }
 
     /**
      * @return string
      */
-    public function getText() : string{
-        return $this->text;
+    public function getValue() : string{
+        return $this->value;
     }
 
     /**
-     * @param string $text
+     * @param string $value
      *
-     * @return Text
+     * @return StringValue
      */
-    public function setText(string $text) : Text{
-        $this->text = $text;
+    public function setValue(string $value) : StringValue{
+        $this->value = $value;
 
         return $this;
     }

@@ -44,4 +44,37 @@ class AlertInfo{
         return $this->duration;
     }
 
+    /**
+     * @param string $title
+     *
+     * @return AlertInfo
+     */
+    public function setTitle(string $title) : AlertInfo{
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return AlertInfo
+     */
+    public function setContent(string $content) : AlertInfo{
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @param int $duration
+     *
+     * @return AlertInfo
+     */
+    public function setDuration(int $duration) : AlertInfo{
+        $this->duration = $duration;
+
+        return $this;
+    }
+
 }

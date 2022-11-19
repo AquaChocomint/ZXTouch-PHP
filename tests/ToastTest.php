@@ -13,13 +13,20 @@ use zxtouch\element\toast\ToastWarning;
 class ToastTest extends ZXTouchTestBase{
 
     public function testToast() : void{
-        $this->zx->sendToast(new ToastSuccess('Success Toast', 2));
+        $result = $this->zx->sendToast(new ToastSuccess('Success Toast', 2));
+        self::assertTrue($result->hasResult());
         sleep(2);
-        $this->zx->sendToast(new ToastError('Error Toast', 2));
+
+        $result = $this->zx->sendToast(new ToastError('Error Toast', 2));
+        self::assertTrue($result->hasResult());
         sleep(2);
-        $this->zx->sendToast(new ToastMessage('Default Toast', 2));
+
+        $result = $this->zx->sendToast(new ToastMessage('Default Toast', 2));
+        self::assertTrue($result->hasResult());
         sleep(2);
-        $this->zx->sendToast(new ToastWarning('Warning Toast', 2));
+
+        $result = $this->zx->sendToast(new ToastWarning('Warning Toast', 2));
+        self::assertTrue($result->hasResult());
     }
 
 }

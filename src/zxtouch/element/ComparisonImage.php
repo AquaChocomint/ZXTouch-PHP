@@ -58,4 +58,48 @@ class ComparisonImage{
         return $this->scaleRation;
     }
 
+    /**
+     * @param string $path
+     *
+     * @return ComparisonImage
+     */
+    public function setPath(string $path) : ComparisonImage{
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * @param float $acceptableValue
+     *
+     * @return ComparisonImage
+     */
+    public function setAcceptableValue(float $acceptableValue) : ComparisonImage{
+        $this->acceptableValue = $acceptableValue;
+
+        return $this;
+    }
+
+    /**
+     * @param int $maxTryTimes
+     *
+     * @return ComparisonImage
+     */
+    public function setMaxTryTimes(int $maxTryTimes) : ComparisonImage{
+        $this->maxTryTimes = $maxTryTimes;
+
+        return $this;
+    }
+
+    /**
+     * @param float $scaleRation
+     *
+     * @return ComparisonImage
+     */
+    public function setScaleRation(float $scaleRation) : ComparisonImage{
+        $this->scaleRation = $scaleRation;
+
+        return $this;
+    }
+
 }

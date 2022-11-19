@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace zxtouch\element\touch;
 
 
+use zxtouch\element\Coordinates;
 use zxtouch\ZXTouchException;
 
 
@@ -21,11 +22,10 @@ abstract class Touch{
 
     public function __construct(
         private int $fingerIndex,
-        private int $x,
-        private int $y
+        private Coordinates $coordinates
     ){
-        if($this->fingerIndex > 19){
-            throw new ZXTouchException('Touch index should not be greater than 19.');
+        if($this->fingerIndex <= 0 || $this->fingerIndex > 19){
+            throw new ZXTouchException('Touch index must be between 1 and 18.');
         }
     }
 
@@ -42,14 +42,30 @@ abstract class Touch{
      * @return int
      */
     public function getX() : int{
-        return $this->x;
+        return $this->coordinates->getX();
     }
 
     /**
      * @return int
      */
     public function getY() : int{
-        return $this->y;
+        return $this->coordinates->getY();
+    }
+
+    /**
+     * Update the coordinates to touch
+     *
+     * @param Coordinates $coordinates
+     */
+    public function setCoordinates(Coordinates $coordinates) : void{
+        $this->coordinates = $coordinates;
+    }
+
+    /**
+     * @param int $fingerIndex
+     */
+    public function setFingerIndex(int $fingerIndex) : void{
+        $this->fingerIndex = $fingerIndex;
     }
 
     /**

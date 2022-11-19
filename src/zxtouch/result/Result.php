@@ -27,7 +27,7 @@ abstract class Result{
     /**
      * @return bool
      */
-    public function getResult() : bool{
+    public function hasResult() : bool{
         return $this->result;
     }
 

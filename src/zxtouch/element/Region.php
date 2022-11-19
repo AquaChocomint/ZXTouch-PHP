@@ -59,9 +59,53 @@ class Region{
     }
 
     /**
+     * @param int $x
+     *
+     * @return Region
+     */
+    public function setX(int $x) : Region{
+        $this->x = $x;
+
+        return $this;
+    }
+
+    /**
+     * @param int $y
+     *
+     * @return Region
+     */
+    public function setY(int $y) : Region{
+        $this->y = $y;
+
+        return $this;
+    }
+
+    /**
+     * @param int $width
+     *
+     * @return Region
+     */
+    public function setWidth(int $width) : Region{
+        $this->width = $width;
+
+        return $this;
+    }
+
+    /**
+     * @param int $height
+     *
+     * @return Region
+     */
+    public function setHeight(int $height) : Region{
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
-    public function toOCR() : string{
+    final public function toOCR() : string{
         return ((string) $this->x) . ',,' . ((string) $this->y) . ',,' . ((string) $this->width) . ',,' . ((string) $this->height);
     }
 

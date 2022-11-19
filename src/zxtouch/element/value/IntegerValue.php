@@ -11,16 +11,11 @@
 
 declare(strict_types=1);
 
-namespace zxtouch\element;
+namespace zxtouch\element\value;
 
 
-class TextRecognitionLevel{
+class IntegerValue{
 
-    /**
-     * A value that determines whether the request prioritizes accuracy or speed in text recognition. 0 means accurate. 1 means faster.
-     *
-     * @param int $value
-     */
     public function __construct(
         private int $value
     ){
@@ -29,8 +24,19 @@ class TextRecognitionLevel{
     /**
      * @return int
      */
-    public function getRecognitionLevel() : int{
+    public function getValue() : int{
         return $this->value;
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return IntegerValue
+     */
+    public function setValue(int $value) : IntegerValue{
+        $this->value = $value;
+
+        return $this;
     }
 
 }

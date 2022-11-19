@@ -59,4 +59,48 @@ abstract class Toast{
         return $this->fontSize;
     }
 
+    /**
+     * @param string $content
+     *
+     * @return Toast
+     */
+    public function setContent(string $content) : Toast{
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @param int $duration
+     *
+     * @return Toast
+     */
+    public function setDuration(int $duration) : Toast{
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    /**
+     * @param int $position
+     *
+     * @return Toast
+     */
+    public function setPosition(int $position) : Toast{
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * @param int $fontSize
+     *
+     * @return Toast
+     */
+    public function setFontSize(int $fontSize) : Toast{
+        $this->fontSize = $fontSize;
+
+        return $this;
+    }
+
 }

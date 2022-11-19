@@ -13,7 +13,7 @@ abstract class ZXTouchTestBase extends TestCase{
     protected ZXTouch $zx;
 
     protected function setUp() : void{
-        $this->zx = new ZXTouch('192.168.0.23');
+        $this->zx = new ZXTouch('192.168.0.8');
     }
 
     protected function tearDown() : void{

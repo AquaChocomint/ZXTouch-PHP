@@ -15,6 +15,8 @@ class InsertTextTest extends ZXTouchTestBase{
         $text .= 'int';
 
         $this->zx->insertText(new Text($text));
+
+        self::assertTrue(true);
     }
 
 }
