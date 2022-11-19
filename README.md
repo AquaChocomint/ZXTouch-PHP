@@ -51,7 +51,7 @@ You can tap your device using the `\zxtouch\ZXTouch::tap()` method.
 
 ```php
 $point = new \zxtouch\element\Coordinates(20, 50); //We will tap this point
-$zxtouch->tap(1, $point); //1 is the finger number. finger number must be between 1 and 18.
+$zxtouch->tap($point);
 ```
 
 ### Getting Screen Size Information
